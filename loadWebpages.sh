@@ -2,15 +2,15 @@
 #First Layer Read Loop 
 for file in ./public_html/*
 do
-	gzip -7 -f k "$file"
-	mv -u "$file.gz" "../FH_Tbot/data/"
+	gzip -7 -k "$file"
+	mv -f "$file.gz" "../FH_Tbot/data/"
 done
 #Image Read Loop 
-for file in ./public_html/resources/img/*
-do
-	gzip -7 -f -k "$file"
-	mv -u "$file.gz" "../FH_Tbot/data/"
-done
+#for file in ./public_html/resources/img/*
+#do
+#	gzip -7 -k "$file"
+#	mv -u "$file.gz"  "../FH_Tbot/data/"
+#done
 
 #Copy Turtle to data and compress
 cp -u ./public_html/T/TurtleMode.html ../FH_Tbot/data/T/TurtleMode.html
