@@ -67,5 +67,15 @@ limitations under the License.
     <th><a href="About.html" style="background-color: #333;"><t2>About</t2></a></th>
     </tr>
     </table><br><br>
+    <script>
+    //Insert redirect to fhtbot.com if address is not fhtbot.com;
+    window.onload(function(){
+        if(window.URL.toString !== "fhtbot.com"){
+            window.URL.apply("fhtbot.com");
+        }
+    });
+
+    
+    </script>
 </body>
 </html>

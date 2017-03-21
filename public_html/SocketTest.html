@@ -586,6 +586,21 @@
         };
         socket.onmessage = function(event){
             console.log(event.data);
+            if(String(event.data).startsWith('/')){
+                //Data return
+                String(event.data).split(',').forEach(function(element){
+                    if(element.startsWith('/')){
+                        switch(element.charAt(1)) {
+                            //Temperature
+                            case "T": document.getElementById("temperature").innerHTML = element.substr(2) + " �C";
+                            break;
+                            //Distance
+                            case "D": document.getElementById("range").innerHTML = element.substr(2) + "mm";
+                            break;
+                        }
+                    }
+                });
+            }
         };
         
         //Add test
