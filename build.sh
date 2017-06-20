@@ -9,17 +9,17 @@ mv -T ./build/public_html ./build/data
 #move into data directory
 cd ./build/data
 #compress html
-gzip -7 -r --rsyncable *.html
+gzip -7 -r *.html
 #compress JavaScript
 cd ./js
-gzip -7 -r --rsyncable *.js
+gzip -7 -r *.js
 cd ./..
 #compress media
 cd ./media
-gzip -7 -r --rsyncable *
+gzip -7 -r *
 cd ./..
 #compress images
 cd ./img
-gzip -7 -r --rsyncable *.png
+gzip -7 -r *.png
 #Back out to root project folder
 cd ./../../..
