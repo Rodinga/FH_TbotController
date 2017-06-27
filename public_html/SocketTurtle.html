@@ -75,6 +75,8 @@
             <button onclick="runInterpreter()" id="runButton">Run Turtle</button>
             <button onclick="parseCode()" id="viewButton">View Your Code </button>
             <button onclick="allStop()" id="stopButton">BOT-STOP</button>
+            <button onclick="saveWorkspace()" id="saveButton">Save Workspace</button>
+            <label>Load Workspace <input type="file" id="loadButton" /> </label>
             <!---
             <label>Distance:</label><label id="range"></label>
             <label>Temperature:</label><label id="temperature"></label>
@@ -820,6 +822,14 @@
             
         }
 
+        //Save workspace via fetching workspace to DOM, then to pretty text and outputting as an XML file.
+        function saveWorkspace(){
+            window.open('data:text/xml;charset=utf-8,' + escape(Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace, false))));
+        }
+        //Load workspace via XML file to DOM, then to the workspace.
+        function loadWorkspace(text){
+            Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(text), workspace);
+        }
     </script>
 </body>
 </html>
