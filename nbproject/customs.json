@@ -1,0 +1,40 @@
+{
+    "elements": {
+        "next": {},
+        "mutation": {
+            "attributes": {
+                "else": {},
+                "elseif": {}
+            }
+        },
+        "field": {},
+        "xml": {
+            "attributes": {
+                "style": {},
+                "id": {}
+            }
+        },
+        "statement": {},
+        "block": {
+            "attributes": {
+                "type": {}
+            }
+        },
+        "category": {
+            "attributes": {
+                "expanded": {},
+                "custom": {},
+                "name": {}
+            }
+        },
+        "value": {
+            "attributes": {
+                "name": {}
+            }
+        },
+        "sep": {}
+    },
+    "attributes": {
+        "name": {}
+    }
+}
