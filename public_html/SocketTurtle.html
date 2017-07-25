@@ -826,12 +826,45 @@
         }
         //TODO Prettyfy the buttons, test, and add in better handling of websockets (i.e. retry less spam)
         //Save workspace via fetching workspace to DOM, then to pretty text and outputting as an XML file.
+        //This should then be saved to either the bot, or to local storage. Files can only be downloaded via the bot.
         function saveWorkspace(){
-            window.open('data:text/xml;charset=utf-8,' + escape(Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace, false))));
+            //window.open('data:text/xml;charset=utf-8,' + escape(Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace, false))));
+            
+            //pop up dialog box, save name and saving to browser storage or bot storage.
+            
+            //get string
+            
+
         }
+
+        function saveToLocal(fileName){
+            localStorage.setItem(fileName, escape(Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace, false))));
+        }
+        function saveToBot(fileName){
+            //Send HTTP PUT to bot to upload.
+            escape(Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace, false)));
+        }
+
         //Load workspace via XML file to DOM, then to the workspace.
+        //Has to be loaded via dialog from the bot or from phone storage.
+        //Needs a js form
         function loadWorkspace(text){
             Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(text), workspace);
+        }
+        //loads from storage
+        function loadFromLocal(fileName){
+            loadWorkspace(localStorage.getItem(fileName));
+        }
+        //GET request to bot to retrieve a specific file.
+        function loadFromBot(fileName){
+            //get + promise
+            var load = Promise(
+                function(resolve,reject){
+                    
+                }
+            )
+            loadWorkspace(fileName);
+            //else, no file/fail
         }
     </script>
 </body>
