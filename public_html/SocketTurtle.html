@@ -842,7 +842,7 @@
         }
         function saveToBot(fileName){
             //Send HTTP PUT to bot to upload.
-            escape(Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace, false)));
+            socket.send("save," + fileName + "," + escape(Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace, false))));
         }
 
         //Load workspace via XML file to DOM, then to the workspace.
@@ -860,10 +860,15 @@
             //get + promise
             var load = Promise(
                 function(resolve,reject){
-                    
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.open("GET","/T/"+fileName+"xml", true);
+                    xhttp.addEventListener("loadend",function(event){
+                        loadWorkspace(xhttp.responseXML);//Somehow I doubt this works.
+                    });
+                    xhttp.send();
                 }
             )
-            loadWorkspace(fileName);
+            loadWorkspace(xml);
             //else, no file/fail
         }
     </script>
