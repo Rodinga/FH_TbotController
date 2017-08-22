@@ -76,7 +76,8 @@
             <button onclick="parseCode()" id="viewButton">View Your Code </button>
             <button onclick="allStop()" id="stopButton">BOT-STOP</button>
             <button onclick="saveWorkspace()" id="saveButton">Save Workspace</button>
-            <label>Load Workspace <input type="file" id="loadButton" /> </label>
+            <button onclick="loadFromBot()" id="loadFromBot">Load Blocks from Bot</button>
+            <button onclick="loadFromLocal()" id="loadFromLocal">Load local Blocks</button>
             <!---
             <label>Distance:</label><label id="range"></label>
             <label>Temperature:</label><label id="temperature"></label>
@@ -828,47 +829,48 @@
         //Save workspace via fetching workspace to DOM, then to pretty text and outputting as an XML file.
         //This should then be saved to either the bot, or to local storage. Files can only be downloaded via the bot.
         function saveWorkspace(){
-            //window.open('data:text/xml;charset=utf-8,' + escape(Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace, false))));
-            
+            var save = escape(Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace, false)));            
             //pop up dialog box, save name and saving to browser storage or bot storage.
-            
-            //get string
-            
-
+            var filename = window.prompt("What name do you want to give to this file?","newfile");
+            //save to bot
+            saveToBot(filename, save);
+            //save to local
+            saveToLocal(filename, save);
         }
 
-        function saveToLocal(fileName){
-            localStorage.setItem(fileName, escape(Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace, false))));
+        function saveToLocal(fileName, save){
+            localStorage.setItem(fileName, save);
         }
-        function saveToBot(fileName){
+        function saveToBot(fileName, save){
             //Send HTTP PUT to bot to upload.
-            socket.send("save," + fileName + "," + escape(Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace, false))));
+            socket.send("save," + fileName + "," + save);
         }
 
         //Load workspace via XML file to DOM, then to the workspace.
         //Has to be loaded via dialog from the bot or from phone storage.
         //Needs a js form
-        function loadWorkspace(text){
+        function marshallWorkspace(text){
             Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(text), workspace);
         }
         //loads from storage
-        function loadFromLocal(fileName){
-            loadWorkspace(localStorage.getItem(fileName));
+        function loadFromLocal(){
+            marshallWorkspace(localStorage.getItem(window.prompt("What is the name of the file?","oldfile")));
         }
         //GET request to bot to retrieve a specific file.
-        function loadFromBot(fileName){
+        function loadFromBot(){
+            var filename = window.prompt("What is the name of the file?", "oldfile");
             //get + promise
-            var load = Promise(
+            var load = new Promise(
                 function(resolve,reject){
                     var xhttp = new XMLHttpRequest();
                     xhttp.open("GET","/T/"+fileName+"xml", true);
                     xhttp.addEventListener("loadend",function(event){
-                        loadWorkspace(xhttp.responseXML);//Somehow I doubt this works.
+                        marshallWorkspace(xhttp.responseXML);//Somehow I doubt this works.
                     });
                     xhttp.send();
                 }
             )
-            loadWorkspace(xml);
+            //marshallWorkspace(xml);
             //else, no file/fail
         }
     </script>
