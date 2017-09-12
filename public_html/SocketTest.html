@@ -566,16 +566,24 @@
       mouseSupport: true
     });
     joystick.addEventListener('touchStart', function() {
-      console.log('down');
+      DBLog('down');
     });
     joystick.addEventListener('touchEnd', function() {
-      console.log('up');
+      DBLog('up');
     });
+    //Debug Logger
+    var debug = true;
+    function DBLog(output){
+      if(debug){
+        console.log(output);
+      }
+    }
 
     //Define Websocket Connection
     var socket;
+    var intervalID;
     initWebsocket('ws://fhtbot.com:81');
-    testSocket();
+    //testSocket();
 
     function initWebsocket(wsURI) {
       socket = new WebSocket(wsURI);
@@ -595,7 +603,7 @@
         console.log("Websocket has encountered a error: " + event);
       }
       socket.onmessage = function(event) {
-        console.log(event.data);
+        DBLog(event.data);
         if (String(event.data).startsWith('/')) {
           //Data return
           String(event.data).split(',').forEach(function(element) {
@@ -619,42 +627,42 @@
     function testSocket() {
       //Add test
       if (socket.readyState === 1) {
-        socket.addEventListener('open', function(event) {
-          socket.send("Hello Server");
-        });
-
-        socket.addEventListener('message', function(event) {
-          console.log("Server Message", event.data);
-        });
+        DBLog("Websocket is connected");
+        return true;
       } else {
-        console.log("Websocket not connected");
+        DBLog("Websocket not connected");
+        return false;
       }
     }
 
     function moveit(dx, dy) {
-      console.log("Attempting Send: readyState:" + socket.readyState + " data:" + dx + "/" + dy);
-      if (socket.readyState === 1) {
-        socket.send("/X" + dx + "/Y" + dy + "/HBDA");
-      }
+
     };
 
     function pageLoaded() {
       //document.getElementById('feedbackId').src = "/feedback";
-      setInterval(function() {
+      if(testSocket){
+        setBroadcast();
+      }else{
+      setTimeout(pageLoaded(),400);
+      }
+    };
+
+    function setBroadcast(){
+      intervalID = setInterval(function() {
         var range = 1000.0;
         var dx = (joystick.deltaX() / container.clientWidth) * range;
         var dy = (joystick.deltaY() / container.clientHeight) * range;
         dx = dx.toFixed(2);
         dy = dy.toFixed(2);
-        // document.getElementById('result').innerHTML = '<b>Result: </b>' + 'dx:' + dx + ' dy:' + dy;
-        moveit(dx, dy);
-        //if (window.feedback.dis !== undefined) {
-        //    document.getElementById("temperature").innerHTML = window.feedback.tmp + " �C";
-        //    document.getElementById("range").innerHTML = window.feedback.dis + "mm";
-        //    document.getElementById('resulttoo').innerHTML = 'Spd: ' + window.feedback.kph + ' Kph, Moved: ' + window.feedback.movd + ' mm, Heading: ' + window.feedback.hed + ' �';
-        //}
+        DBLog("Attempting Send: readyState:" + socket.readyState + " data:" + dx + "/" + dy);
+        if (socket.readyState === 1) {
+          socket.send("/X" + dx + "/Y" + dy + "/HBDA");
+        }else{
+          clearInterval(intervalID)
+        }
       }, 200);
-    };
+    }
   </script>
 </body>
 
