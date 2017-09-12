@@ -573,15 +573,17 @@
     });
     //Debug Logger
     var debug = true;
-    function DBLog(output){
-      if(debug){
+
+    function DBLog(output) {
+      if (debug) {
         console.log(output);
       }
     }
 
     //Define Websocket Connection
     var socket;
-    var intervalID;
+    var bIntervalID;
+    var sIntervalID;
     initWebsocket('ws://fhtbot.com:81');
     //testSocket();
 
@@ -590,14 +592,18 @@
       //Websocket events
       socket.onopen = function(event) {
         console.log("Websocket Connected");
+        setBroadcast();
       };
       socket.onclose = function(event) {
         console.log("Websocket Lost, Retrying.")
         //Waits 100ms and retries connection
-        setTimeout({
-          initWebsocket('ws://fhtbot.com:81');
-          testSocket();
-        }, 100);
+        sIntervalID = setInterval({
+          if (!testSocket()) {
+            initWebsocket('ws://fhtbot.com:81');
+          } else {
+            clearInterval(sIntervalID);
+          }
+        }, 1000);
       }
       socket.onerror = function(event) {
         console.log("Websocket has encountered a error: " + event);
@@ -635,21 +641,8 @@
       }
     }
 
-    function moveit(dx, dy) {
-
-    };
-
-    function pageLoaded() {
-      //document.getElementById('feedbackId').src = "/feedback";
-      if(testSocket){
-        setBroadcast();
-      }else{
-      setTimeout(pageLoaded(),400);
-      }
-    };
-
-    function setBroadcast(){
-      intervalID = setInterval(function() {
+    function setBroadcast() {
+      bIntervalID = setInterval(function() {
         var range = 1000.0;
         var dx = (joystick.deltaX() / container.clientWidth) * range;
         var dy = (joystick.deltaY() / container.clientHeight) * range;
@@ -658,8 +651,8 @@
         DBLog("Attempting Send: readyState:" + socket.readyState + " data:" + dx + "/" + dy);
         if (socket.readyState === 1) {
           socket.send("/X" + dx + "/Y" + dy + "/HBDA");
-        }else{
-          clearInterval(intervalID)
+        } else {
+          clearInterval(bIntervalID)
         }
       }, 200);
     }
