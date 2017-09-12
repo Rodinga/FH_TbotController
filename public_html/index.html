@@ -69,11 +69,12 @@ limitations under the License.
     </table><br><br>
     <script>
     //Insert redirect to fhtbot.com if address is not fhtbot.com;
-    window.onload(function(){
-        if(window.URL.toString !== "fhtbot.com"){
-            window.URL.apply("fhtbot.com");
-        }
-    });
+    window.adddEventListener('load',
+        function(){
+            if(window.URL.toString !== "fhtbot.com"){
+                window.URL.apply("fhtbot.com");
+            }
+        },false);
 
     
     </script>
