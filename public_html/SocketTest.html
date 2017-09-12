@@ -582,8 +582,8 @@
 
     //Define Websocket Connection
     var socket;
-    var bIntervalID;
-    var sIntervalID;
+    var bIntID;
+    var sIntID;
     initWebsocket('ws://fhtbot.com:81');
     //testSocket();
 
@@ -597,11 +597,11 @@
       socket.onclose = function(event) {
         console.log("Websocket Lost, Retrying.")
         //Waits 100ms and retries connection
-        sIntervalID = setInterval({
-          if (!testSocket()) {
+        sIntID = setInterval(function(){
+          if(!testSocket()) {
             initWebsocket('ws://fhtbot.com:81');
           } else {
-            clearInterval(sIntervalID);
+            clearInterval(sIntID);
           }
         }, 1000);
       }
@@ -642,7 +642,7 @@
     }
 
     function setBroadcast() {
-      bIntervalID = setInterval(function() {
+      bIntID = setInterval(function() {
         var range = 1000.0;
         var dx = (joystick.deltaX() / container.clientWidth) * range;
         var dy = (joystick.deltaY() / container.clientHeight) * range;
@@ -652,7 +652,7 @@
         if (socket.readyState === 1) {
           socket.send("/X" + dx + "/Y" + dy + "/HBDA");
         } else {
-          clearInterval(bIntervalID)
+          clearInterval(bIntID)
         }
       }, 200);
     }
