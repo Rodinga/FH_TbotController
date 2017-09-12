@@ -3,13 +3,13 @@
     <head>
         <title>FHTbot Drive Assist</title>
         <!-- 		Copyright 2016, Tilden Groves.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
-    
+
         http://www.apache.org/licenses/LICENSE-2.0
-    
+
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -113,7 +113,7 @@
             <p align="center">
                 Touch the screen and move
                 -
-                works with mouse too 
+                works with mouse too
                 <br>
                 <span id="result"></span>
             <table><tr><th>
@@ -427,7 +427,7 @@
             var touchList = event.changedTouches;
             for (var i = 0; i < touchList.length && touchList[i].identifier !== this._touchIdx; i++)
                 ;
-            // if touch event isnt found, 
+            // if touch event isnt found,
             if (i === touchList.length)
                 return;
 
@@ -501,7 +501,7 @@
             return canvas;
         }
 
-        //    move using translate3d method with fallback to translate > 'top' and 'left'   
+        //    move using translate3d method with fallback to translate > 'top' and 'left'
         //      modified from https://github.com/component/translate and dependents
 
         VirtualJoystick.prototype._move = function (style, x, y)
@@ -578,12 +578,25 @@
             console.log('up');
         });
 
-        //Start Websocket Connection
-        var socket = new WebSocket('ws://fhtbot.com:81');
+        //Define Websocket Connection
+        var socket;
+        initWebsocket('ws://fhtbot.com:81');
+        testSocket();
+        function initWebsocket(wsURI){
+            socket = new WebSocket(wsURI);
+        }
         //Websocket events
         socket.onopen = function(event){
             console.log("Websocket Connected");
         };
+        socket.onclose = function(event){
+            console.log("Websocket Lost, Retrying.")
+            //Waits 100ms and retries connection
+            setTimeout({
+              initWebsocket('ws://fhtbot.com:81');
+              testSocket();
+            },100);
+        }
         socket.onmessage = function(event){
             console.log(event.data);
             if(String(event.data).startsWith('/')){
@@ -602,7 +615,7 @@
                 });
             }
         };
-        
+        function testSocket(){
         //Add test
         if (socket.readyState === 1) {
             socket.addEventListener('open', function (event) {
@@ -614,6 +627,7 @@
             });
         }else{
             console.log("Websocket not connected");
+        }
         }
         function moveit(dx, dy)
         {
