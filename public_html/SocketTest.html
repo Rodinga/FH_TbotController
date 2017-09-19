@@ -596,6 +596,8 @@
       };
       socket.onclose = function(event) {
         console.log("Websocket Lost, Retrying.")
+        clearInterval(bIntID);
+        /*
         //Waits 100ms and retries connection
         sIntID = setInterval(function(){
           if(!testSocket()) {
@@ -604,9 +606,11 @@
             clearInterval(sIntID);
           }
         }, 1000);
+        */
       }
       socket.onerror = function(event) {
         console.log("Websocket has encountered a error: " + event);
+        clearInterval(bIntID);
       }
       socket.onmessage = function(event) {
         DBLog(event.data);
@@ -650,11 +654,11 @@
         dy = dy.toFixed(2);
         DBLog("Attempting Send: readyState:" + socket.readyState + " data:" + dx + "/" + dy);
         if (socket.readyState === 1) {
-          socket.send("/X" + dx + "/Y" + dy + "/HBDA");
+          socket.send("/X" + dx + "/Y" + dy + "/DA");
         } else {
           clearInterval(bIntID)
         }
-      }, 200);
+      }, 500);
     }
   </script>
 </body>
