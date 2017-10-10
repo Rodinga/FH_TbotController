@@ -88,14 +88,14 @@ div.rangeImage {
 	background-image: URL("img/ThSoTh.png");
 	background-repeat: no-repeat;
 }
-div.thermostatImage {
+div.voltageImage {
     position: relative;
     width: 60px;
     height:100px;
-	background-image: URL("img/ThSmTh.png");
+	background-image: URL('img/Bat1.png');
 	background-repeat: no-repeat;
 }
-div.thermostatText {
+div.voltageText {
     position: absolute;
     top: 27%;
     right: 5%;
@@ -103,7 +103,7 @@ div.thermostatText {
     height: 24%;
 	color: white;
 	font-size: 19px;
-	background-color: black;
+	<!--background-color: black;-->
 }
     </style>
   </head>
@@ -117,8 +117,8 @@ div.thermostatText {
       <br>
       <span id="result"></span>
       <table><tr><th>
-      <div class="thermostatImage">
-  		<div class="thermostatText" align="center"><span id="temperature">__ °C</span></div>
+      <div class="voltageImage">
+  		<div class="voltageText" align="center"><span id="voltage"></span></div>
   		</div>
       </th>
       <th width="100%"><div align="center"><span id="resulttoo" align="center"></span></div></th><th>
@@ -556,7 +556,28 @@ VirtualJoystick.prototype._check3D = function()
         document.getElementById('result').innerHTML  = '<b>Result: </b>' + 'dx:' + dx + ' dy:' + dy;
         moveit(dx,dy);
         if (window.feedback.dis !== undefined){
-		document.getElementById("temperature").innerHTML =  window.feedback.tmp + " °C";
+		//document.getElementById("voltage").innerHTML =  window.feedback.volt + " V";
+		console.log(window.feedback.volt + " Volts");
+		var batteryLevel = window.feedback.bLev;
+		var vI = document.getElementsByClassName('voltageImage');
+		switch(batteryLevel){
+			case 1: vI[0].style.backgroundImage = "url('img/Bat1.png')";
+			break;
+			case 2: vI[0].style.backgroundImage = "url('img/Bat2.png')";
+			break;
+			case 3: vI[0].style.backgroundImage = "url('img/Bat3.png')";
+			break;
+			case 4: vI[0].style.backgroundImage = "url('img/Bat4.png')";
+			break;
+			case 5: vI[0].style.backgroundImage = "url('img/Bat5.png')";
+			break;
+			case 6: vI[0].style.backgroundImage = "url('img/Bat6.png')";
+			break;
+			case 7: vI[0].style.backgroundImage = "url('img/Bat7.png')";
+			break;
+			case 8: vI[0].style.backgroundImage = "url('img/Bat8.png')";
+			break;
+		}
 		document.getElementById("range").innerHTML = window.feedback.dis + "mm";
         document.getElementById('resulttoo').innerHTML  = 'Spd: ' + window.feedback.kph + ' Kph, Moved: ' + window.feedback.movd + ' mm, Heading: ' + window.feedback.hed + ' °';
         }
