@@ -23,3 +23,4 @@ cd ./img
 gzip -7 -r *.png
 #Back out to root project folder
 cd ./../../..
+echo "Build Complete"
