@@ -555,11 +555,11 @@ limitations under the License.
       socket = new WebSocket(wsURI);
       //Websocket events
       socket.onopen = function (event) {
-        console.log("Websocket Connected");
+        DBlog("Websocket Connected");
         setBroadcast();
       };
       socket.onclose = function (event) {
-        console.log("Websocket Lost, Retrying.")
+        DBlog("Websocket Lost, Retrying.")
         clearInterval(bIntID);
         /*
         //Waits 100ms and retries connection
@@ -573,7 +573,7 @@ limitations under the License.
         */
       }
       socket.onerror = function (event) {
-        console.log("Websocket has encountered a error: " + event);
+        DBLog("Websocket has encountered a error: " + event);
         clearInterval(bIntID);
       }
       socket.onmessage = function (event) {
