@@ -674,9 +674,6 @@
         };
         //Setup Queue namespace
         var botQueue = "";
-        //Setup File Upload event
-        var loadButton = document.getElementById("loadButton");
-        loadButton.addEventListener("onChange",loadWorkspace(loadButton.val),false);
         //Setup the interpreter
         var jsInterpreter = null;
         function initApi(interpreter, scope) {
@@ -836,12 +833,12 @@
         function saveWorkspace(){
             var save = escape(Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace, false)));            
             //pop up dialog box, save name and saving to browser storage or bot storage.
-            var filename = window.prompt("What name do you want to give to this file?","newfile");
-            dbLog("FileName" + filename + " content: " + save, 2);
+            var fileName = window.prompt("What name do you want to give to this file? Make sure you remember it!","newfile");
+            dbLog("FileName" + fileName + " content: " + save, 2);
             //save to bot
-            saveToBot(filename, save);
+            saveToBot(fileName, save);
             //save to local
-            saveToLocal(filename, save);
+            saveToLocal(fileName, save);
         }
 
         function saveToLocal(fileName, save){
@@ -850,7 +847,7 @@
         }
         function saveToBot(fileName, save){
             //Send HTTP PUT to bot to upload.
-            socket.send("save," + fileName + "," + save);
+            socket.send("save," + fileName + ".xml" + "," + save);
             dbLog(fileName + " sent to bot",2);
         }
 
@@ -867,21 +864,14 @@
         }
         //GET request to bot to retrieve a specific file.
         function loadFromBot(){
-            var filename = window.prompt("What is the name of the file?", "oldfile");
-            //get + promise
-            var load = new Promise(
-                function(resolve,reject){
-                    dbLog("Requesting " + filename + " from bot",2);
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.open("GET","/T/"+fileName+"xml", true);
-                    xhttp.addEventListener("loadend",function(event){
-                        marshallWorkspace(xhttp.responseXML);//Somehow I doubt this works.
-                    });
-                    xhttp.send();
-                }
-            )
-            //marshallWorkspace(xml);
-            //else, no file/fail
+            var fileName = window.prompt("What is the name of the file?", "oldfile");            
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("GET","/T/"+ fileName +".xml", true);
+            xhttp.onload = function(e){
+                dbLog("Bot response: " + xhttp.responseXML,2);
+                marshallWorkspace(xhttp.responseXML);//Somehow I doubt this works.
+            };
+            xhttp.send();
         }
     </script>
 </body>
