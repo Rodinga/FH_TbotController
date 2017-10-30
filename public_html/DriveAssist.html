@@ -114,10 +114,29 @@ limitations under the License.
       color: white;
       font-size: 19px;
     }
+    
+    div.thermostatImage {
+      position: relative;
+      width: 60px;
+      height: 100px;
+      background-image: URL("img/ThSmTh.png");
+      background-repeat: no-repeat;
+    }
+
+    div.thermostatText {
+      position: absolute;
+      top: 27%;
+      right: 5%;
+      width: 90%;
+      height: 24%;
+      color: white;
+      font-size: 19px;
+      background-color: black;
+    }
   </style>
 </head>
 
-<body draggable="false" ondragstart="return false;" ondrop="return false;" onLoad="pageLoaded()">
+<body draggable="false" ondragstart="return false;" ondrop="return false;">
   <div id="container">
     <h1 align="center">
       <font face="Helvetica Neue">FHTbot</font>
@@ -129,8 +148,10 @@ limitations under the License.
       <table>
         <tr>
           <th>
-            <div class="voltageImage">
-              <!--<div class="voltageText" align="center"><span id="voltage">__ V</span></div>-->
+            <!--
+              vtSlot is where temp/volt meters are added.
+            -->
+            <div id="vtSlot">
             </div>
           </th>
           <th width="100%">
@@ -164,7 +185,7 @@ limitations under the License.
         console.log(output);
       }
     }
-
+    var vtSwitch = "N"; //Controls left readout.
     var joystick = new VirtualJoystick({
       container: document.getElementById('container'),
       mouseSupport: true,
@@ -212,30 +233,13 @@ limitations under the License.
                 //Battery
                 case "V":
                   //document.getElementById("voltage").innerHTML =  window.feedback.volt + " V";
-                  var batteryLevel = window.feedback.bLev;
-                  var vI = document.getElementsByClassName('voltageImage');
-                  switch (batteryLevel) {
-                    case 1: vI[0].style.backgroundImage = "url('img/Bat1.png')";
-                      break;
-                    case 2: vI[0].style.backgroundImage = "url('img/Bat2.png')";
-                      break;
-                    case 3: vI[0].style.backgroundImage = "url('img/Bat3.png')";
-                      break;
-                    case 4: vI[0].style.backgroundImage = "url('img/Bat4.png')";
-                      break;
-                    case 5: vI[0].style.backgroundImage = "url('img/Bat5.png')";
-                      break;
-                    case 6: vI[0].style.backgroundImage = "url('img/Bat6.png')";
-                      break;
-                    case 7: vI[0].style.backgroundImage = "url('img/Bat7.png')";
-                      break;
-                    case 8: vI[0].style.backgroundImage = "url('img/Bat8.png')";
-                      break;
-                  }
+                  //Refer to vSelection function
+                  vSelection(window.feedback.bLev);
                   break;
                 //Temperature
                 case "T":
-                  document.getElementById("temperature").innerHTML = element.substr(2) + " �C";
+                  //document.getElementById("temperature").innerHTML = element.substr(2) + " �C";
+                  tSelection(element.substr(2) + " °C");
                   break;
                 //Distance
                 case "D":
@@ -273,6 +277,54 @@ limitations under the License.
           clearInterval(bIntID);
         }
       }, 500);
+    }
+    
+    function tSelection(tempString) {
+      if (vtSwitch !== "T") {
+        document.getElementById("vtSlot").innerHTML =
+          `<div class="thermostatImage">
+            <div class="thermostatText" align="center">
+              <span id="temperature">__°C</span>
+            <!--
+              
+              -->
+          </div>
+        </div>`;
+        vtSwitch = "T";
+      }
+      document.getElementById("temperature").innerHTML = tempString;
+    }
+
+    function vSelection(batteryLevel) {
+      if (vtSwitch !== "V") {
+        //Deploy Voltage
+        document.getElementById("vtSlot").innerHTML =
+          `<div class="voltageImage">
+          <div class="voltageText" align="center">
+                <span id="voltage"></span>
+          </div>
+        </div>`;
+        vtSwitch = "V";
+      }
+      var vI = document.getElementsByClassName('voltageImage');
+      switch (batteryLevel) {
+        case 1: vI[0].style.backgroundImage = "url('img/Bat1.png')";
+          break;
+        case 2: vI[0].style.backgroundImage = "url('img/Bat2.png')";
+          break;
+        case 3: vI[0].style.backgroundImage = "url('img/Bat3.png')";
+          break;
+        case 4: vI[0].style.backgroundImage = "url('img/Bat4.png')";
+          break;
+        case 5: vI[0].style.backgroundImage = "url('img/Bat5.png')";
+          break;
+        case 6: vI[0].style.backgroundImage = "url('img/Bat6.png')";
+          break;
+        case 7: vI[0].style.backgroundImage = "url('img/Bat7.png')";
+          break;
+        case 8: vI[0].style.backgroundImage = "url('img/Bat8.png')";
+          break;
+      }
     }
   </script>
 </body>
