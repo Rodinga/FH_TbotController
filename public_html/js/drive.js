@@ -13,30 +13,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-function DBLog(output) {
-  if (debug) {
-    console.log(output);
-  }
-}
-
-var joystick = new VirtualJoystick({
-  container: document.getElementById('container'),
-  mouseSupport: true,
-});
-joystick.addEventListener('touchStart', function () {
-  DBLog('down');
-});
-joystick.addEventListener('touchEnd', function () {
-  DBLog('up');
-});
-DBLog("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
-
-//Define Websocket Connection
-var socket;
-var bIntID;
-var sIntID;
-initWebsocket(websocketAddress);
-
 function initWebsocket(wsURI) {
   socket = new WebSocket(wsURI);
   //Websocket events
@@ -151,21 +127,21 @@ function bSelection(batteryLevel, type) {
   if (type === "B") {
     var vI = document.getElementsByClassName('voltageImage');
     switch (batteryLevel) {
-      case 1: vI[0].style.backgroundImage = "url('img/Bat1.png')";
+      case "1": vI[0].style.backgroundImage = "url('img/Bat1.png')";
         break;
-      case 2: vI[0].style.backgroundImage = "url('img/Bat2.png')";
+      case "2": vI[0].style.backgroundImage = "url('img/Bat2.png')";
         break;
-      case 3: vI[0].style.backgroundImage = "url('img/Bat3.png')";
+      case "3": vI[0].style.backgroundImage = "url('img/Bat3.png')";
         break;
-      case 4: vI[0].style.backgroundImage = "url('img/Bat4.png')";
+      case "4": vI[0].style.backgroundImage = "url('img/Bat4.png')";
         break;
-      case 5: vI[0].style.backgroundImage = "url('img/Bat5.png')";
+      case "5": vI[0].style.backgroundImage = "url('img/Bat5.png')";
         break;
-      case 6: vI[0].style.backgroundImage = "url('img/Bat6.png')";
+      case "6": vI[0].style.backgroundImage = "url('img/Bat6.png')";
         break;
-      case 7: vI[0].style.backgroundImage = "url('img/Bat7.png')";
+      case "7": vI[0].style.backgroundImage = "url('img/Bat7.png')";
         break;
-      case 8: vI[0].style.backgroundImage = "url('img/Bat8.png')";
+      case "8": vI[0].style.backgroundImage = "url('img/Bat8.png')";
         break;
     }
   } else if (type === "V") {

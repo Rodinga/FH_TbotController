@@ -179,6 +179,30 @@ limitations under the License.
     var mode = "/DM";     //Sets Drive mode /DM or Drive Assist /DA
     var vtbSwitch = "N";  //Controls left readout.
     var websocketAddress = 'ws://fhtbot.com:81';
+
+    function DBLog(output) {
+      if (debug) {
+        console.log(output);
+      }
+    }
+
+    var joystick = new VirtualJoystick({
+      container: document.getElementById('container'),
+      mouseSupport: true,
+    });
+    joystick.addEventListener('touchStart', function () {
+      DBLog('down');
+    });
+    joystick.addEventListener('touchEnd', function () {
+      DBLog('up');
+    });
+    DBLog("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
+
+    //Define Websocket Connection
+    var socket;
+    var bIntID;
+    var sIntID;
+    initWebsocket(websocketAddress);
   </script>
 </body>
 
