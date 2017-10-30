@@ -1,3 +1,55 @@
+function tSelection(tempString) {
+  if (vtbSwitch !== "T") {
+    document.getElementById("vtbSlot").innerHTML =
+      `<div class="thermostatImage">
+        <div class="thermostatText" align="center">
+          <span id="temperature">__°C</span>
+        <!--
+          
+          -->
+      </div>
+    </div>`;
+    vtbSwitch = "T";
+  }
+  document.getElementById("temperature").innerHTML = tempString;
+}
+
+function bSelection(batteryLevel, type) {
+  if (vtbSwitch !== "B") {
+    //Deploy Battery
+    document.getElementById("vtbSlot").innerHTML =
+      `<div class="voltageImage">
+      <div class="voltageText" align="center">
+            <span id="voltage"></span>
+      </div>
+    </div>`;
+    vtbSwitch = "B";
+  }
+  if(type === "B"){
+  var vI = document.getElementsByClassName('voltageImage');
+  switch (batteryLevel) {
+    case 1: vI[0].style.backgroundImage = "url('img/Bat1.png')";
+      break;
+    case 2: vI[0].style.backgroundImage = "url('img/Bat2.png')";
+      break;
+    case 3: vI[0].style.backgroundImage = "url('img/Bat3.png')";
+      break;
+    case 4: vI[0].style.backgroundImage = "url('img/Bat4.png')";
+      break;
+    case 5: vI[0].style.backgroundImage = "url('img/Bat5.png')";
+      break;
+    case 6: vI[0].style.backgroundImage = "url('img/Bat6.png')";
+      break;
+    case 7: vI[0].style.backgroundImage = "url('img/Bat7.png')";
+      break;
+    case 8: vI[0].style.backgroundImage = "url('img/Bat8.png')";
+      break;
+  }
+}else if(type === "V"){
+  document.getElementById("voltage").innerHTML = batteryLevel + type;
+}
+}
+
 var VirtualJoystick = function (opts) {
     opts = opts || {};
     this._container = opts.container || document.body;
