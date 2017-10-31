@@ -645,7 +645,13 @@
 
     </script>
     <script>
-
+        var debug = true;
+        var debugLevel = 2
+        function dbLog(output, priority){
+            if(debug && priority > debugLevel){
+                console.log(output);
+            }
+        }
         //Blockly Injection and positioning
         var blocklyArea = document.getElementById('blocklyArea');
         var blocklyDiv = document.getElementById('blocklyDiv');
@@ -661,16 +667,13 @@
         var socket = new WebSocket('ws://fhtbot.com:81');
         //Websocket events
         socket.onopen = function(event){
-            console.log("Websocket Connected");
+            dbLog("Websocket Connected",2);
         };
         socket.onmessage = function(event){
-            console.log(event.data);
+            dbLog(event.data,1);
         };
         //Setup Queue namespace
         var botQueue = "";
-        //Setup File Upload event
-        var loadButton = document.getElementById("loadButton");
-        loadButton.addEventListener("onChange",loadWorkspace(loadButton.val),false);
         //Setup the interpreter
         var jsInterpreter = null;
         function initApi(interpreter, scope) {
@@ -692,7 +695,7 @@
             // Add an API function for the addCommand() block.
             var wrapper = function (text) {
                 text = text ? text.toString() : '';
-                console.log("Output from interpreter:" + text);
+                dbLog("Output from interpreter:" + text,2);
                 addCommand(text);
             };
             interpreter.setProperty(scope, 'addCommand',
@@ -700,7 +703,7 @@
             // Add an API function for the setDistance() block.
             var wrapper = function (text) {
                 text = text ? text.toString() : '';
-                console.log("Output from interpreter:" + text);
+                dbLog("Output from interpreter:" + text,2);
                 setDistance(text);
             };
             interpreter.setProperty(scope, 'setDistance',
@@ -708,7 +711,7 @@
             // Add an API function for the runBot() block.
             var wrapper = function (text) {
                 text = text ? text.toString() : '';
-                console.log("Sending run Command");
+                dbLog("Sending run Command",2);
                 runBot(text);
             };
             interpreter.setProperty(scope, 'runBot',
@@ -770,9 +773,8 @@
          */
         function runBot() {
             if (botQueue !== "") {
-                console.log();
                 if(botQueue.length < 6000){
-                    console.log("Attempting Send: data: /data" + botQueue);
+                    dbLog("Attempting Send: data: /data" + botQueue,2);
                     if (socket.readyState === 1) {
                         socket.send("/data," + botQueue);
                     }
@@ -788,7 +790,7 @@
          * @returns {undefined}
          */
         function allStop() {
-            console.log("Attempting Send: allstop");
+            dbLog("Attempting Send: allstop",2);
                 if (socket.readyState === 1) {
                     socket.send("/data,AS,0,");
                 }
@@ -799,11 +801,11 @@
          * @returns {undefined}
          */
         function HB() {
-            console.log("Attempting Send: heartbeat");
+            dbLog("Attempting Send: heartbeat",1);
                 if (socket.readyState === 1) {
                     socket.send("/HB,");
                 }else{
-                    console.log("Heartbeat waiting for websocket");
+                    dbLog("Heartbeat waiting for websocket",2);
                 }
         }
 
@@ -831,26 +833,30 @@
         function saveWorkspace(){
             var save = escape(Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace, false)));            
             //pop up dialog box, save name and saving to browser storage or bot storage.
-            var filename = window.prompt("What name do you want to give to this file?","newfile");
+            var fileName = window.prompt("What name do you want to give to this file? Make sure you remember it!","newfile");
+            dbLog("FileName" + fileName + " content: " + save, 2);
             //save to bot
-            saveToBot(filename, save);
+            saveToBot(fileName, save);
             //save to local
-            saveToLocal(filename, save);
+            saveToLocal(fileName, save);
         }
 
         function saveToLocal(fileName, save){
             localStorage.setItem(fileName, save);
+            dbLog(fileName + " saved",2);
         }
         function saveToBot(fileName, save){
             //Send HTTP PUT to bot to upload.
-            socket.send("save," + fileName + "," + save);
+            socket.send("save," + fileName + ".xml" + "," + save);
+            dbLog(fileName + " sent to bot",2);
         }
 
         //Load workspace via XML file to DOM, then to the workspace.
         //Has to be loaded via dialog from the bot or from phone storage.
         //Needs a js form
         function marshallWorkspace(text){
-            Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(text), workspace);
+            dbLog("Marshalling: " + text, 3);
+            Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(unescape(text)), workspace);
         }
         //loads from storage
         function loadFromLocal(){
@@ -858,20 +864,14 @@
         }
         //GET request to bot to retrieve a specific file.
         function loadFromBot(){
-            var filename = window.prompt("What is the name of the file?", "oldfile");
-            //get + promise
-            var load = new Promise(
-                function(resolve,reject){
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.open("GET","/T/"+fileName+"xml", true);
-                    xhttp.addEventListener("loadend",function(event){
-                        marshallWorkspace(xhttp.responseXML);//Somehow I doubt this works.
-                    });
-                    xhttp.send();
-                }
-            )
-            //marshallWorkspace(xml);
-            //else, no file/fail
+            var fileName = window.prompt("What is the name of the file?", "oldfile");            
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("GET","/T/"+ fileName +".xml", true);
+            xhttp.onload = function(e){
+                dbLog("Bot response: " + xhttp.responseXML,2);
+                marshallWorkspace(xhttp.responseXML);//Somehow I doubt this works.
+            };
+            xhttp.send();
         }
     </script>
 </body>

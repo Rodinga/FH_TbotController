@@ -33,6 +33,8 @@ limitations under the License.
         color: red;
         font-size: 40px;
         text-shadow: 2px 2px Black;
+		background-color: rgba(50, 50, 50, 0.85);
+		display: inline;
     }
 	button{
 	opacity: 0.98;
@@ -47,19 +49,27 @@ limitations under the License.
   </head>
   <body>
     <div>
-      <h1 align="center"><font face="Helvetica Neue" >FHTbot</font></h1>
-      <p align="center">
-      Welcome to the Flinders / hackerspace at tonsley bot web control interface.<br>
-      </p><br>
+    <table style="width:100%"><tr><th style="width:30%;"></th><th style="width:30%;">
+      <h1 align="center"><font face="Helvetica Neue" >FHTbot</font></h1></th><th style="width:30%;"></th></tr></table>
+      <table><tr><th style="width:10%;"></th>
+      <th style="width:50%;"><p align="center" style="background-color: rgba(50, 50, 50, 0.85); display: inline;">
+      Welcome to the Flinders / hackerspace at tonsley bot web control interface.</p></th>
+      <th style="width:10%;"></th></tr></table>
+      <br><br>
       <div class="startButton">
-  <a href="DriveMode.html" target="_self" id="button"><img src="img/StartBtn.png" alt="Button" style="width: 50%;height: auto;padding-Left: 25%;"></a>
+  <a href="DriveMode.html" target="_self" id="button"><img src="img/StartBtn.png" alt="Button" style="width: 40%;height: auto;padding-Left: 30%;"></a>
 </div>
     </div>
     <br><br>
     <table style="width:100%"><tr>
-    <th><a href="TurtleMode.html"><button style="width:90%;height:30px;">Turtle Mode</button></a></th>
-    <th><a href="DriveAssist.html"><button style="width:90%;height:30px;">Driver Assist</button></a></th>
-    <th><a href="Sounds.html"><button style="width:90%;height:30px;">Sounds</button></a></th></tr>
+    <th style="width:33%"><a href="TurtleMode.html"><button style="width:90%;height:30px;">Turtle Mode</button></a></th>
+    <th style="width:33%"><a href="DriveAssist.html"><button style="width:90%;height:30px;">Driver Assist</button></a></th>
+    <th style="width:33%"><a href="Sounds.html"><button style="width:90%;height:30px;">Sounds</button></a></th></tr>
+    <tr><th style="width:33%;;height:10px;"></th></tr>
+    <tr><th style="width:33%"></th>
+    <th style="width:33%"><a href="/HybridMode.html"><button style="width:90%;height:30px;">Obstacle Avoidance Mode</button></a></th>
+    <th style="width:33%"></th>
+    </tr>
     </table>
     <br><br>
     <table style="width:100%"><tr>
@@ -67,16 +77,6 @@ limitations under the License.
     <th><a href="About.html" style="background-color: #333;"><t2>About</t2></a></th>
     </tr>
     </table><br><br>
-    <script>
-    //Insert redirect to fhtbot.com if address is not fhtbot.com;
-    window.adddEventListener('load',
-        function(){
-            if(window.URL.toString !== "fhtbot.com"){
-                window.URL.apply("fhtbot.com");
-            }
-        },false);
-
     
-    </script>
 </body>
 </html>
