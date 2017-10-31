@@ -34,11 +34,17 @@ limitations under the License.
         font-size: 40px;
         text-shadow: 2px 2px Black;
 		background-color: rgba(50, 50, 50, 0.85);
-		display: inline;
+		
     }
 	button{
 	opacity: 0.98;
 	}
+    #headline{
+        background-color: rgba(50, 50, 50, 0.85);
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: larger;
+        text-shadow: 2px 2px black;
+    }
 .startButton{
     position: relative;
   }
@@ -51,11 +57,8 @@ limitations under the License.
     <div>
     <table style="width:100%"><tr><th style="width:30%;"></th><th style="width:30%;">
       <h1 align="center"><font face="Helvetica Neue" >FHTbot</font></h1></th><th style="width:30%;"></th></tr></table>
-      <table><tr><th style="width:10%;"></th>
-      <th style="width:50%;"><p align="center" style="background-color: rgba(50, 50, 50, 0.85); display: inline;">
-      Welcome to the Flinders / hackerspace at tonsley bot web control interface.</p></th>
-      <th style="width:10%;"></th></tr></table>
-      <br><br>
+      <p align="center" id="headline">Welcome to the Flinders / hackerspace at tonsley bot web control interface.</p>
+      
       <div class="startButton">
   <a href="DriveMode.html" target="_self" id="button"><img src="img/StartBtn.png" alt="Button" style="width: 40%;height: auto;padding-Left: 30%;"></a>
 </div>
